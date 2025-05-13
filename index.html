@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Order Food on Train</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+  <style>
+    /* Combined and cleaned CSS */
+    body {
+      font-family: 'Open Sans', sans-serif; /* Using Open Sans from second code as body font */
+      background: #f4f7f6;
+      color: #333;
+      margin: 0; padding: 0;
+      line-height: 1.6; /* Improved readability */
+    }
+
+    .order-section {
+      background: linear-gradient(to bottom, #fcb69f, #ffecd2);
+      padding: 61px 20px 65px; /* Combined padding */
+      color: #fff; /* Default text color for section */
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .container {
+      max-width: 700px; /* Max width for content */
+      margin: 0 auto; /* Center the container */
+      position: relative;
+    }
+
+    .header-text-container {
+      margin-bottom: 30px; /* Added spacing below header text */
+    }
+
+    /* Headings Styling */
+    .main-heading {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: black; /* Changed to black as per second code */
+    }
+
+    .sub-heading {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 1.1em;
+      font-weight: 400;
+      margin-bottom: 30px;
+      opacity: 0.9;
+      color: black; /* Changed to black as per second code */
+    }
+
+    /* Form Container Styling */
+    .order-form-container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      text-align: left;
+      position: relative;
+      /* height: 157px; /* Removed fixed height to allow content to expand */
+    }
+
+    /* Tabs Styling */
+    .tabs {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 20px;
+      position: relative;
+      border-bottom: 2px solid #eee;
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 10px 15px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .tab-button.active {
+      color: #e74c3c;
+    }
+
+    .tab-indicator {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      height: 3px;
+      background-color: #e74c3c;
+      width: 0;
+      transition: left 0.3s ease, width 0.3s ease;
+    }
+
+    /* Tab Content Styling */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Input Group (for icon and input) */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px; /* Added margin-bottom for spacing */
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+      font-size: 1.2em;
+      z-index: 1; /* Ensure icon is above input */
+    }
+
+    .premium-input {
+      width: 100%; /* Use 100% width and rely on padding */
+      padding: 12px 15px 12px 45px; /* Left padding for icon */
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1em;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-sizing: border-box;
+    }
+
+    .premium-input:focus {
+      outline: none;
+      border-color: #e74c3c;
+      box-shadow: 0 0 8px rgba(231, 76, 60, 0.2);
+    }
+
+    /* Autocomplete suggestions list styles */
+    ul#suggestions {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      /* Updated Border for cleaner look */
+      border: 1px solid #dcdcdc;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      position: absolute; /* Position relative to form container */
+      /* Adjusted width and left to align with input padding */
+      width: calc(100% - 60px); /* Total width - left/right padding of form-container (30+30) */
+      left: 30px; /* Align with left padding of form-container */
+      z-index: 10; /* Ensure suggestions are on top */
+      background: #fff; /* Ensure background is white */
+      /* Updated Box Shadow for softer look */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      /* Rounded bottom corners to match form */
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      display: none; /* Initially hidden */
+      font-size: 0.95em; /* Slightly smaller font for list items */
+      color: #000;
+    }
+    ul#suggestions li {
+      padding: 10px 15px; /* Added horizontal padding */
+      background: #fff;
+      cursor: pointer;
+      /* Updated Border bottom for softer separation */
+      border-bottom: 1px solid #f0f0f0;
+      transition: background-color 0.2s ease; /* Smooth hover effect */
+    }
+    ul#suggestions li:last-child {
+      border-bottom: none; /* No border for last item */
+    }
+    ul#suggestions li:hover {
+      background: #f9f9f9; /* Very light grey hover background */
+    }
+    ul#suggestions li.no-match {
+      cursor: default;
+      color: #888;
+      font-style: italic;
+      padding: 10px 15px; /* Keep padding consistent */
+      background: #fff; /* Ensure background is white */
+    }
+    .highlight {
+      font-weight: bold;
+      color: #000;
+    }
+
+
+    /* Loader styles */
+    .loader-bar {
+      margin: 10px 0;
+      display: block; /* Ensure it takes full width when shown */
+      position: relative; /* Needed for positioning the loader inside */
+      height: 4.8px; /* Match loader height */
+      background: #eee; /* Light background */
+      border-radius: 3px;
+      overflow: hidden; /* Hide overflow animation */
+    }
+    .loader {
+      width: 100%; /* Container width */
+      height: 4.8px;
+      display: inline-block; /* Or block */
+      position: absolute; /* Position inside loader-bar */
+      top: 0;
+      left: 0;
+      background: #ccc; /* Fallback background */
+      border-radius: 3px;
+      overflow: hidden; /* Hide internal animation overflow */
+    }
+    .loader::after {
+      content: '';
+      width: 96px; /* Width of the moving bar */
+      height: 4.8px;
+      background: #c30909; /* Loader color */
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box;
+      animation: hitZak 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes hitZak {
+      0% {
+        left: 0;
+        transform: translateX(-1%);
+      }
+      100% {
+        left: 100%;
+        transform: translateX(-99%);
+      }
+    }
+
+
+    /* Button Styling */
+    .premium-button {
+      display: block; /* Changed to block to take full width */
+      width: 100%;
+      background: linear-gradient(45deg, #e74c3c, #c0392b);
+      color: #fff;
+      padding: 12px 25px;
+      font-size: 1.1em;
+      font-weight: 600;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: opacity 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      margin-top: 20px; /* Added margin top */
+    }
+
+    .premium-button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .premium-button:active {
+      transform: translateY(0);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Trust Text Styling */
+    .trust-text {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.9em;
+      color: #777;
+    }
+
+    .trust-icon {
+      margin-right: 5px;
+      color: #2ecc71;
+    }
+
+    /* Optional: Responsive adjustments */
+    @media (max-width: 600px) {
+      .main-heading {
+        font-size: 1.8em;
+      }
+
+      .sub-heading {
+        font-size: 1em;
+      }
+
+      .order-form-container {
+        padding: 20px;
+      }
+
+      .premium-input {
+        padding: 10px 15px 10px 35px; /* Adjusted padding */
+      }
+
+      .input-icon {
+        left: 10px;
+        font-size: 1em;
+      }
+      ul#suggestions { /* Adjust suggestions list width on smaller screens */
+        /* Total width - left/right padding of form-container (20+20) */
+        width: calc(100% - 40px);
+        left: 20px; /* Align with left padding of form-container */
+      }
+
+      .premium-button {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="order-section">
+    <div class="container">
+      <div class="header-text-container">
+        <h1 class="main-heading">Order Delicious Food on Trains Online</h1>
+        <p class="sub-heading">
+          Order Fresh, Delicious & Hygienic Meals Onboard Trains
+        </p>
+      </div>
+
+      <div class="order-form-container">
+        <div class="tabs">
+          <button class="tab-button active" data-tab="pnr">
+            Order Via PNR
+          </button>
+          <button class="tab-button" data-tab="train">
+            Order Via Train No.
+          </button>
+          <div class="tab-indicator"></div>
+        </div>
+
+                <div class="tab-content" id="train">
+          <div class="input-group">
+            <i class="fas fa-train input-icon"></i>
+            <input
+              id="train_input_search"                type="text"
+              placeholder="Enter Train Number"
+              class="premium-input"
+              autocomplete="off"              />
+          </div>
+
+                        <input type="hidden" id="train_number" name="train_number" />            <div id="loader" class="loader-bar" style="display:none;">              <span class="loader"></span>
+          </div>
+          <ul id="suggestions"></ul>              <button id="search_train_button" class="premium-button">              Search Train & Order
+          </button>
+        </div>
+
+                <div class="tab-content active" id="pnr">
+          <div class="input-group">
+            <i class="fas fa-ticket-alt input-icon"></i>
+            <input
+              type="text"
+              placeholder="Enter 10 Digit PNR No."
+              class="premium-input"
+            />
+          </div>
+          <button class="premium-button">Order Now</button>
+        </div>
+
+        <p class="trust-text">
+          <i class="fas fa-utensils trust-icon"></i>100 % guaranteed
+          delivery on time
+        </p>
+      </div>
+    </div>
+  </section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Existing Tab Switching Logic ---
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const tabIndicator = document.querySelector('.tab-indicator');
+
+        function updateIndicator(activeTab) {
+            const tabRect = activeTab.getBoundingClientRect();
+            const containerRect = activeTab.closest('.tabs').getBoundingClientRect();
+
+            tabIndicator.style.left = `${tabRect.left - containerRect.left}px`;
+            tabIndicator.style.width = `${tabRect.width}px`;
+        }
+
+        const initialActiveTab = document.querySelector('.tab-button.active');
+        if (initialActiveTab) {
+            setTimeout(() => {
+                updateIndicator(initialActiveTab);
+            }, 50);
+        }
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                tab.classList.add('active');
+                const targetTab = tab.dataset.tab;
+                document.getElementById(targetTab).classList.add('active');
+
+                updateIndicator(tab);
+            });
+        });
+
+
+        // --- Integrated Autocomplete Logic (using jQuery) with Debouncing ---
+        $(function(){
+          let selectedTrain = null; // Variable to track selected train number
+          let debounceTimer = null; // Timer variable for debouncing
+          const debounceDelay = 300; // Delay in milliseconds
+
+          // Target the input field inside the train tab
+          const trainInput = $('#train_input_search');
+          const suggestionsList = $('#suggestions');
+          const loaderElement = $('#loader');
+          const hiddenTrainNumberInput = $('#train_number');
+          const searchButton = $('#search_train_button');
+
+
+          trainInput.on('input', function(){
+            clearTimeout(debounceTimer); // Clear the previous timer on new input
+
+            const q = $(this).val().trim();
+            suggestionsList.empty(); // Clear previous suggestions
+            selectedTrain = null; // Reset selected train
+            hiddenTrainNumberInput.val(''); // Clear hidden input
+
+            if (!q) {
+              loaderElement.hide();
+              suggestionsList.hide(); // Hide suggestions if input is empty
+              return; // Don't search if input is empty
+            }
+
+            loaderElement.show(); // Show loader immediately when typing starts
+
+            // Set a new timer for the AJAX call
+            debounceTimer = setTimeout(() => {
+              // Make the AJAX call to your autocomplete endpoint
+              $.getJSON('/autocomplete', { q: q }, function(list){
+                loaderElement.hide(); // Hide loader
+                suggestionsList.empty(); // Clear previous suggestions before adding new ones
+
+                if (list && list.length) {
+                  list.forEach(item => {
+                    const regex = new RegExp(q, 'i');
+                    // Assuming item format is "TRAIN_NUMBER / TRAIN_NAME"
+                    const parts = item.split(' / ');
+                    const trainNumber = parts[0];
+                    const trainInfo = parts.join(' / '); // Use full text for display
+
+                    // Highlight the search query in the suggestion text
+                    const highlighted = trainInfo.replace(regex, match => `<span class="highlight">${match}</span>`);
+
+                    // Append suggestion item to the list
+                    suggestionsList.append(`<li data-train="${trainNumber}">${highlighted}</li>`);
+                  });
+                   suggestionsList.show(); // Show the list if there are suggestions
+                } else {
+                  // No matches found
+                  suggestionsList.append('<li class="no-match">No matches found</li>');
+                   suggestionsList.show(); // Show the list even with the "No matches" message
+                }
+              }).fail(function() {
+                // Handle AJAX error
+                loaderElement.hide();
+                suggestionsList.empty();
+                suggestionsList.append('<li class="no-match">Error fetching suggestions.</li>');
+                 suggestionsList.show(); // Show the list even with the error message
+              });
+            }, debounceDelay); // The delay after typing stops
+          });
+
+          // Click handler for suggestions list items (using delegation)
+          $('.order-form-container').on('click', '#suggestions li', function(){
+            if (!$(this).hasClass('no-match')) {
+              // Get the full displayed text (excluding highlight span for .text())
+              // Use .html() to get content including highlight, then strip tags or re-format if needed,
+              // but for setting input value, maybe .text() is fine or store original in data attribute.
+              // Let's stick to .text() as it gets the visible text content.
+              const text = $(this).text();
+              const number = $(this).data('train'); // Get the train number from data attribute
+
+              trainInput.val(text); // Set the input field value to the full text
+              hiddenTrainNumberInput.val(number); // Set the hidden input value to the train number
+              selectedTrain = number; // Store the selected train number
+
+              suggestionsList.hide(); // Hide the suggestions list after selection
+            }
+          });
+
+          // --- Handlers for hiding/showing suggestions on outside click/focus ---
+
+          // Hide suggestions when clicking outside the input or suggestions list
+          $(document).on('click', function(e){
+            const target = $(e.target);
+            // Check if the clicked element is NOT the input or NOT within the suggestions list
+            if (!target.closest('#train_input_search').length && !target.closest('#suggestions').length) {
+              suggestionsList.hide();
+            }
+          });
+
+          // Show suggestions when the input field is focused, if it contains text and suggestions are available
+          trainInput.on('focus', function(){
+             // Only show if input has text AND the suggestions list is currently populated and hidden
+            if ($(this).val().trim() !== '' && suggestionsList.children('li').length > 0 && !suggestionsList.is(':visible')) {
+                suggestionsList.show();
+            }
+            // Note: If the list was hidden because of no matches, clicking focus won't show it,
+            // which is the desired behavior. User needs to type to trigger a new search.
+          });
+
+
+          // Click handler for the Search button
+          searchButton.on('click', function(e){
+            e.preventDefault(); // Prevent default button action
+
+            // Before processing, ensure any active timer is cleared
+            clearTimeout(debounceTimer);
+
+            if (!selectedTrain) {
+              // If no train was selected from suggestions
+              alert("Please select a train from the list."); // Or use a more styled notification
+            } else {
+              // A train has been selected, proceed with search
+              const trainNum = hiddenTrainNumberInput.val();
+              if (trainNum) {
+                // Example: Navigate to a search results page
+                // Replace '/search-results' with your actual URL and 'train_number' parameter name
+                window.location.href = '/?train_number=' + encodeURIComponent(trainNum);
+              } else {
+                // This case should ideally not happen if selectedTrain is true, but as a fallback:
+                alert("An error occurred. Please select the train again.");
+              }
+            }
+          });
+
+
+        }); // End jQuery ready
+    }); // End DOMContentLoaded
+  </script>
+
+</body>
+</html>
